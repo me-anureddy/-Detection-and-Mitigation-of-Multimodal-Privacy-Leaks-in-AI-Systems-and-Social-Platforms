@@ -2,6 +2,14 @@
 
 from __future__ import annotations
 
+# Workaround for Python 3.14 + pydantic v1 compatibility
+import sys
+import re
+if sys.version_info >= (3, 14):
+    # Ensure re.Pattern is available for pydantic v1
+    if not hasattr(re, 'Pattern'):
+        re.Pattern = type(re.compile(''))
+
 import json
 from pathlib import Path
 from typing import Optional

@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeakWatch Architecture Diagrams</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        
+        .diagram-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow-x: auto;
+        }
+        
+        .diagram-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            font-size: 1.8em;
+        }
+        
+        .diagram-section p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            border: 2px solid #667eea;
+        }
+        
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            margin-top: 40px;
+            opacity: 0.8;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            color: #1565c0;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            .diagram-section {
+                padding: 15px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔐 LeakWatch Architecture Diagrams</h1>
+            <p>Detection and Mitigation of Multimodal Privacy Leaks in AI Systems</p>
+        </header>
+        
+        <!-- Architecture Diagram -->
+        <div class="diagram-section">
+            <h2>1. System Architecture Overview</h2>
+            <p>Complete end-to-end architecture showing all 8 layers from input processing through detection, mitigation, audit, and delivery to downstream systems.</p>
+            <div class="info-box">
+                💡 <strong>Tip:</strong> Right-click on the diagram to save as image, or use the Mermaid Live Editor link below.
+            </div>
+            <div class="mermaid">
+graph TB
+    subgraph Input["🔌 INPUT LAYER"]
+        CLI["CLI Interface<br/>(Typer)"]
+        REST["REST API<br/>(FastAPI)"]
+        Batch["Batch Processing"]
+    end
+    
+    subgraph Preprocess["<br/>⚙️ PRE-PROCESSING LAYER<br/>"]
+        TypeDetect["Content Type Detection"]
+        Validate["Format Validation"]
+        Normalize["Normalization & Encoding"]
+        SizeCheck["Size/Dimension Checks"]
+    end
+    
+    subgraph Detection["<br/>🔍 DETECTION LAYER<br/>"]
+        TextMod["📝 Text Module<br/>NER • Rules • Tokenization"]
+        ImgMod["🖼️ Image Module<br/>Face Detection • OCR • BBox"]
+        AudioAdp["🎵 Audio Adapter<br/>ASR → Text Reuse"]
+        VideoAdp["🎬 Video Adapter<br/>Frame Extract → Image Reuse"]
+    end
+    
+    UnifiedOutput["<br/>📊 UNIFIED DETECTION OUTPUT<br/>Type • Location • Confidence • Metadata<br/>"]
+    
+    subgraph Orchestration["<br/>🎯 ORCHESTRATION LAYER<br/>"]
+        PipelineMgr["Pipeline Manager"]
+        PolicyEngine["Policy Engine"]
+        RiskAssess["Risk Assessment"]
+        Router["Routing Logic"]
+    end
+    
+    subgraph Mitigation["<br/>🛡️ MITIGATION STRATEGIES<br/>"]
+        TextMit["📝 Text: Mask • Redact<br/>Replace • Synthesize"]
+        ImgMit["🖼️ Image: Blur • Pixelate<br/>Inpaint • Overlay"]
+        AudioMit["🎵 Audio: Mute • Beep<br/>Voice Modulation"]
+        VideoMit["🎬 Video: Frame Blur<br/>Feature Strip"]
+    end
+    
+    subgraph Explain["<br/>📋 EXPLAINABILITY & AUDIT<br/>"]
+        VisualArt["Visual Artifacts<br/>(Overlays, Heatmaps)"]
+        TextReport["Text Reports<br/>(Spans, Before/After)"]
+        AuditLog["Audit Logs<br/>(JSONL Format)"]
+        ComplianceRpt["Compliance Reports<br/>(GDPR, CCPA)"]
+    end
+    
+    subgraph Output["<br/>✅ OUTPUT LAYER<br/>"]
+        Sanitized["Sanitized Content"]
+        Metadata["Metadata & Stats"]
+        Decision["Policy Decision<br/>ALLOW/BLOCK"]
+    end
+    
+    subgraph Downstream["<br/>🚀 DOWNSTREAM SYSTEMS<br/>"]
+        AISystem["AI/ML Systems"]
+        SocialPlatforms["Social Platforms"]
+        Analytics["Analytics Systems"]
+    end
+    
+    CLI --> TypeDetect
+    REST --> TypeDetect
+    Batch --> TypeDetect
+    
+    TypeDetect --> Validate
+    Validate --> Normalize
+    Normalize --> SizeCheck
+    
+    SizeCheck --> TextMod
+    SizeCheck --> ImgMod
+    SizeCheck --> AudioAdp
+    SizeCheck --> VideoAdp
+    
+    TextMod --> UnifiedOutput
+    ImgMod --> UnifiedOutput
+    AudioAdp --> UnifiedOutput
+    VideoAdp --> UnifiedOutput
+    
+    UnifiedOutput --> PipelineMgr
+    PipelineMgr --> PolicyEngine
+    PolicyEngine --> RiskAssess
+    RiskAssess --> Router
+    
+    Router --> TextMit
+    Router --> ImgMit
+    Router --> AudioMit
+    Router --> VideoMit
+    
+    TextMit --> VisualArt
+    ImgMit --> VisualArt
+    AudioMit --> TextReport
+    VideoMit --> TextReport
+    
+    VisualArt --> AuditLog
+    TextReport --> AuditLog
+    AuditLog --> ComplianceRpt
+    
+    ComplianceRpt --> Sanitized
+    ComplianceRpt --> Metadata
+    ComplianceRpt --> Decision
+    
+    Sanitized --> AISystem
+    Metadata --> SocialPlatforms
+    Decision --> Analytics
+    
+    style Input fill:#4A90E2,stroke:#2E5C8A,color:#fff
+    style Preprocess fill:#7B68EE,stroke:#5A4BA8,color:#fff
+    style Detection fill:#50C878,stroke:#3A9B5C,color:#fff
+    style Orchestration fill:#FF6B6B,stroke:#CC5555,color:#fff
+    style Mitigation fill:#FFA500,stroke:#CC8400,color:#fff
+    style Explain fill:#1E90FF,stroke:#1566B2,color:#fff
+    style Output fill:#2ECC71,stroke:#229954,color:#fff
+    style Downstream fill:#95E1D3,stroke:#6FA8A1,color:#000
+            </div>
+            <div class="button-group">
+                <a href="https://mermaid.live/edit#pako:eNqtVeruoyAM_ZVG95puVKS67tzO5ib7gNmIZBBZAe13X9sB0Ufbdt1tCHB4cMB2OOJOdwSg2gOZd5TwhWBjjEZFYW7B5V1fIJT4URzFrfjTIDLFFZEEV0SyIpL-YBIVkayIZD8YRoVhbsHlXV9glPhRHMWt-FPbf6-sV59ePq8a6xXk9epxaKxXkNeL5aGxXkFeL5aHxnoHeT1YHhrrHeT1YHkore5B3g9WCqXVPcj7wbJSVV2DvB8sK1XVNcj7wbJSVVWDvB8sK1XVDXJ-sKxUVTfI-8GyUlXdIO8Hy0pVdYO8HywrVdV1eD9YVqqqa5D3g2WlqroGeT9YVqqqa5D3g2WlqroGeT9YVqqqa5D3g2WlqroGeT9YVqqqa5D3g2WlqroGeT9YVqqqa5D3gxVlqroGeT9YUaaqG_j9YGVYUT7I-8GKsFJXxPvBirBSV8T7wYqwUlfE-8GKsJJXxPvBirCSV8T7wYqwklfE-8GKsJJXxPvBirCSV8T7wYqwklfE-8GKsJJXxPvBirCSV8T7wYqwklebg2WlqroGeT9YVqqqa5D3g2WlqroGeT9YVqqqa5D3g2WlqroGeT9YVqqqa5D3g2WlqroGeT9YVqqqa5D3g2WlqroGeT9YVqqqa5D3g2WlqroGeT9Y-VdUxPvByrBSV8T7wYqwUlfE-8GKsJJXxPvBirBSV8T7wYqwklfE-8GKsJJXxPvBirCSV8T7wYqwklfE-8GKsJJXxPvBirCSV8T7wYqwklfE-8GKsFJXxPvBirBSV8T7wYqwUlfE-8GKsJJXxPvBirCSV8T7wYqwklfE-8GKsJJXxPvBirCSV8T7wYqwklfE-8GKsJJXxPvBirBSV8T7wYqwUlfE-8GKsJJXxPvBirCSV8T7wYqwklfE-8GKsJJXxPvBirCSV8T7wYqwklfE-8GKsJJXxPvBirBSV8T7wYqwUlfE-8GKsJJXxPvBirBSV8T7wYqwUlfE-8GKsAoA__yVnE4" class="btn btn-primary">Open in Mermaid Live Editor</a>
+            </div>
+        </div>
+        
+        <!-- Data Flow Diagram -->
+        <div class="diagram-section">
+            <h2>2. Data Flow Pipeline</h2>
+            <p>Shows how content flows through the system, from input preprocessing through parallel detection pipelines, unified output, mitigation, audit logging, and final delivery.</p>
+            <div class="mermaid">
+graph LR
+    A["🔐 User Content<br/>Text • Image • Audio • Video"] 
+    
+    B["⚙️ Preprocessing<br/>Validation & Normalization"]
+    
+    C{"🔀 Content<br/>Type?"}
+    
+    T["📝 TEXT PIPELINE<br/>NER + Rules + Tokenization"]
+    I["🖼️ IMAGE PIPELINE<br/>Face Detection + OCR"]
+    Au["🎵 AUDIO PIPELINE<br/>ASR Conversion"]
+    V["🎬 VIDEO PIPELINE<br/>Frame Extraction"]
+    
+    D["📊 Detection Results<br/>Entities & Regions Identified"]
+    
+    P["🎯 Policy Application<br/>Risk Scoring & Routing"]
+    
+    M["🛡️ Mitigation Applied<br/>Masking • Blur • Redaction • etc"]
+    
+    E["📋 Audit & Explainability<br/>Logs • Reports • Visualizations"]
+    
+    O["✅ Sanitized Output<br/>Content + Audit Trail"]
+    
+    DOWN["🚀 Safe Delivery to<br/>Downstream Systems"]
+    
+    A --> B
+    B --> C
+    
+    C -->|Text| T
+    C -->|Image| I
+    C -->|Audio| Au
+    C -->|Video| V
+    
+    T --> D
+    I --> D
+    Au --> D
+    V --> D
+    
+    D --> P
+    P --> M
+    M --> E
+    E --> O
+    O --> DOWN
+    
+    style A fill:#FF6B6B,stroke:#CC5555,color:#fff
+    style B fill:#7B68EE,stroke:#5A4BA8,color:#fff
+    style C fill:#FFD700,stroke:#CCB000,color:#000
+    style T fill:#50C878,stroke:#3A9B5C,color:#fff
+    style I fill:#50C878,stroke:#3A9B5C,color:#fff
+    style Au fill:#50C878,stroke:#3A9B5C,color:#fff
+    style V fill:#50C878,stroke:#3A9B5C,color:#fff
+    style D fill:#4A90E2,stroke:#2E5C8A,color:#fff
+    style P fill:#FF6B6B,stroke:#CC5555,color:#fff
+    style M fill:#FFA500,stroke:#CC8400,color:#fff
+    style E fill:#1E90FF,stroke:#1566B2,color:#fff
+    style O fill:#2ECC71,stroke:#229954,color:#fff
+    style DOWN fill:#95E1D3,stroke:#6FA8A1,color:#000
+            </div>
+            <div class="button-group">
+                <a href="https://mermaid.live/edit#pako:eNqtWHFvmzAM_RWLT2OVdghtS9pKI9OmdpqKpmk3TdummzRVNRywYMAYcOtoe_X3PSCAl9XqxJB82Lg_Pu7Onv0zcKeOUNWxsIYhTxqsINLKFxJYmVTxLvuEOc-hpOQ-l9LOOYVSTnHlVdVVzhmFUk5x5VXVZT4ZRVKeceWZ_WU6GUVSnnOb2VyGUUZRnHPbzVSGUs5xbgtzOUs55zg3Bbo5yznnMMeJc5Nzm9lZhnFOcc4Ry0JRzjnONUEtBzmnOJdb-x25nDOcc5ybgtsc55y0nKL2v7FOGKDKGFjGGNQiZzn1j0j5OiCNvA3ZzFLOcW4LHnOcc45ybtO9Qv2Qg5xznBvI2c0tBrJ2OYg5yznAu3yB5-tyEHOac5ybgtsc55yDnbLKgHd_OfGc5tznGOfc5xyDnbOcc5xzlnOOcDVSBLOcU5xynXuPoQzRhiTMQU1F1VkJZeXqbsxf5ZxXuGYV7lmFe1bhnnW4Zx3uWYd71uGeDXjWS_a8RMpqEfKaWDu9RBqpxdQO72E2uml1E4voXZ6GbXTS6idXkrtNFJqp5dQO92U2umkVE4joXZySQmxo-LqGPXZoFRQGK7OeqyCwmF1NnhVUFgKW50NXhUU1sJWZ4NXBYWNsNXZRqiCxmF1NnhVUDgKW521sJWZJJZGjcNmNxQqwADaoF0g0nJXhB7ixMNhTrKw0SAn-ZNq4LvNf-N9z4n_7H3PAeD3fC8V9hxzvOcK-yp53iO95x7vOcK-19hzzveS9X0X_JeLkH_S2IrSxwqMw4VGYeKjEMlxqEi41CRcajIOFRkHCoyDtU4jQrM_wsDdPklQJP-k6AJ_0nQhP8kaML_ZCPL_KeXC5vwX2FlBvvLLGzCf4GVGQWX81p-k_9QP51W-LkG_p8wPkML-H8J4zP8v4XxGf5fwvgs_y9hfJb_lzA-w_9_DmK2tCxRi6MVbQU1_nqScxvHq2c4q1FHo8YbjhpuOGq44ajhRKOGE40ajjRqeNJo40mjjSeNNp40mnjRaeNJ5w2njBqeNJ4w3njDaOGJ44nnjBqeOFx4w3jxpdGG084bTzhvOGE8YbzhhPGG844b_jhvOGH84bzhhvPG084bzzhvPGG84bzzhsvPGG88YbzhhvPG284YbzhhvOGG84YbzhhvOGG84YbzhhvPG684YbzhhvPG284YbzhhvPG684YbzhhvPGG84YbzhhvPGG884YbzhhvOGG84YbzhhvPGG84YbzhhvPGG844bz_hvPOG88YbzzhvPOG88YbzxhvPOG88YbzxhvPOG88YbzxhvPOG88YbzxhvPOG88YbzxhvPOG88YbzxhvPOG884YbzhhvPGG88YbzxhvPGG88YbzxhvPGG88YbzxhvPGG88YbzxhvPGG88YbzxhvPOG88YbzxhvPOG88YbzxhvPOG88YbzxhvPOG88YbzxhvPOG88YbzxhvPOG88YbzxhvPOG88YbzxhvPOG88YbzxhvPOG89YbzxhvPOG88YbzxhvPOG88YbzxhvPOG88YbzxhvPOG88YbzxhvPOG88YbzxhvPOG88YbzxhvPOG88YbzxhvPOG88YbzxhvPOG88YbzxhvPOG88YbzxhvPOG88YbxbKC3i44LKhoxAI0ggqyqJCn5hB7RJ7c2EOZX_K_vz0jLxX0zLxX_zLxX8h_2e89v_f_3_T_KX8n/YOYkhhdhU=" class="btn btn-primary">Open in Mermaid Live Editor</a>
+            </div>
+        </div>
+        
+        <!-- Module Interaction Diagram -->
+        <div class="diagram-section">
+            <h2>3. Module Interaction Architecture</h2>
+            <p>Shows how Python modules within LeakWatch interact with each other, from interfaces through configuration, detection, mitigation, and audit layers.</p>
+            <div class="mermaid">
+graph TB
+    subgraph ModuleStack["LeakWatch Module Stack"]
+        subgraph Interface["INTERFACE LAYER"]
+            CLI_Mod["🖥️ CLI Module"]
+            API_Mod["🌐 REST API Module"]
+        end
+        
+        subgraph Config["CONFIG & POLICY"]
+            YAML["Config Files<br/>(YAML)"]
+            PolicyMgr["Policy Manager"]
+        end
+        
+        subgraph Utils["UTILITIES & HELPERS"]
+            Logger["Logging Module"]
+            Types["Type Definitions"]
+            ConfigUtil["Config Utils"]
+        end
+        
+        subgraph DetectionCore["DETECTION CORE"]
+            TextDet["text.py<br/>Text Detection"]
+            ImgDet["image.py<br/>Image Detection"]
+            AudioAdp["Audio Adapter"]
+            VideoAdp["Video Adapter"]
+        end
+        
+        subgraph MitigationCore["MITIGATION CORE"]
+            TextMit["text.py<br/>Text Mitigation"]
+            ImgMit["image.py<br/>Image Mitigation"]
+        end
+        
+        subgraph ExplainCore["EXPLAINABILITY CORE"]
+            TextExpl["text.py<br/>Text Explainability"]
+            ImgExpl["image.py<br/>Image Explainability"]
+            AuditMod["Audit Module"]
+        end
+        
+        subgraph OrchCore["ORCHESTRATION CORE"]
+            Pipeline["pipeline.py<br/>Pipeline Manager"]
+        end
+    end
+    
+    CLI_Mod -->|uses| YAML
+    API_Mod -->|uses| YAML
+    
+    CLI_Mod -->|calls| Pipeline
+    API_Mod -->|calls| Pipeline
+    
+    YAML -->|loads| PolicyMgr
+    
+    Pipeline -->|coordinates| DetectionCore
+    Pipeline -->|coordinates| MitigationCore
+    Pipeline -->|coordinates| ExplainCore
+    Pipeline -->|applies| PolicyMgr
+    
+    DetectionCore -->|logs to| Logger
+    MitigationCore -->|logs to| Logger
+    ExplainCore -->|logs to| Logger
+    
+    TextDet -->|feeds| Pipeline
+    ImgDet -->|feeds| Pipeline
+    AudioAdp -->|uses| TextDet
+    VideoAdp -->|uses| ImgDet
+    
+    Pipeline -->|executes| TextMit
+    Pipeline -->|executes| ImgMit
+    
+    TextMit -->|generates| TextExpl
+    ImgMit -->|generates| ImgExpl
+    
+    TextExpl -->|writes| AuditMod
+    ImgExpl -->|writes| AuditMod
+    
+    AuditMod -->|logs via| Logger
+    
+    style Interface fill:#4A90E2,stroke:#2E5C8A,color:#fff
+    style Config fill:#FFA500,stroke:#CC8400,color:#fff
+    style Utils fill:#7B68EE,stroke:#5A4BA8,color:#fff
+    style DetectionCore fill:#50C878,stroke:#3A9B5C,color:#fff
+    style MitigationCore fill:#FF6B6B,stroke:#CC5555,color:#fff
+    style ExplainCore fill:#1E90FF,stroke:#1566B2,color:#fff
+    style OrchCore fill:#2ECC71,stroke:#229954,color:#fff
+            </div>
+            <div class="button-group">
+                <a href="https://mermaid.live/edit#pako:eNqtWE1vGzEM_RWDT0tR27JtyO0IvGDbAesx6CAMhkzH9XDJrCiJTFr8951k-UXZ04AZNiDxP0mHh8dHUn8HYNJaUFQEF6MZA6lcIWGbEYxvTXSzFiBCiFTHqspqXlQLXRzlOPXuPGlpmLSKSMXFVXNRZZkQFhGZmKg6sxZVjgkxZZmQmKg6sxFVjgkxZZkQk2Ym6sxGVDkmxJRlQkxUxGZ2olpxKZuoErPTDVSJWekGqsSsdANVYla6gSoxK91AlZiVbqBKzEo3UCVmpRuoErPSDVSJWekGqsSsdANVYla6gSoxK91AlZgV4oBVYla6gSoxK91AlZiVbqBKzEo3UCVmpRuoErPSDVSJWekGqsSsdANVYla6gSoxKwWOdXkDVWJWuoEqMSvdQJWYlW6gSsxKN1AlZqUbqBKz0g1UiVnpBqrErHQDVWJWuoEqMSvdQJW4FR6gStyKv4EqcSv-BqrErfgbqBK34m-gSt4K_wZVhVvxX0BV4Vb8F1AVbsXfQBVuFQ5QhVvxN1CFW_EvUOFW_BdQhVvxVwBVuBV_A1XhVvwvUBVuxV-BKtyKv4EqcSt-A1XiVvwNVIlb8RuoErfiN1AlbsVvoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEquwsRuoEqu
+            </div>
+            <div class="button-group">
+                <a href="https://mermaid.live/edit#pako:eNq1V01vozAM_bUbn3iCdEWNqVJ3UaXtKPW0nzW9qBGpJJiQNh3i359Puzd2hqbpxMXvt58dO85DG8pOCdSqKKFapcm5KGKiKo0AAZXx-HxJL7QRyUJkVCb7iakqqd_MYr7RUDjJrX4i8xyuQahXTMFiFx6DMxGHcZjJiRGSAVSTTuGwvGTfYM8YzwY9h7i7w9zF4OEw9xE1EQMvqOlLSbdUxG1n0GR3nOVm0k8YFxxQNbYngNlvB8utpZZaS61rqXWttVZaAUWF1lrUerE-HG1tY4jLJzMlPp1R7VWKaBBJZLfpf-wBjM5nP83lpBIHt0xohNZYfKGXx__oLjf3OuN-W1g80K4J_uMb1IQtR9eELUxuGIGbcI19WxjEy8JNJOw32YWhB0KJEy6v3Kcbp0YNvNT8AJND_C3uoqhFakQKuJLEMfZiOlvfIWQFkm5d_WLSXfMGzZXLXC-hY0LNIAKxgwEuV9v-bkV1x5M3-yAX0YvSMQT1T2LDnM0OjKPfhqbI8EwDZQvQqhEDyMqVYj4mxPdY3WlSSfKxKmWRgTrZOu9GEhKOkqZrvBMnqFLO3-N5u0hFwWjOQHPWAm2E3WdLWLrCb3xwHXgVUnvphKMnbTw6R3Ks-GxZDrZAMctkbZvDCKvhZJYDDrmPr_pEbN3vZuBmQKz5UVHGxPMGJGMEOhB6DvkHk7Y-g9Cd1dWlppY0gRkz9qdXdNNvQCmOXzUSiCEkYKV6sj0OltqjdNpGVddxiTBo1L_f7L4T6K8b1-8LaqTLGPJqPQ_raqI7kGVl9j8kN6xv1Qjl8xb4k52mfmYLzV0WiCK7ypFPRNkRkGJB3V8jkN6tEGr-J4wP8X-VJC99U5_g2cKtALCG1PKJnCfZQc05VzHVaXDJSpVKI6-tIddkd6Lz8b1p-1K7ROMuuv4F8Aa5OQVZ1Rg_VTVRZmIcbVhjQAkREqgfVFfRrVnqWTiO7eGfvhajj24KnyDt2kGl7B-VzcIiGaI0vPdpqj0DzqBcS93dJrYgSq0sQdHVqEEPDJ0ygUF1Bm1LWOQX2zUc0VQKUzLdaVKhPV_RZW4pyCYXRdCv1qRs56DEzETPKM4eTATX1vC-HjKJzM6tVGcJxN_u7DdqyxO4MBVznbQMD5PQ8Lqk2aMxP2KVYtLEPZESmO0I8_c8Lnd1-ZHrYkxQn_7M7y7dLv-mxaKy4O3K9KN503KtRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStRRxqkJVWNx1RStR" class="btn btn-primary">Open in Mermaid Live Editor</a>
+            </div>
+        </div>
+        
+        <div class="diagram-section">
+            <h2>📥 Download Options</h2>
+            <p>You can download these diagrams in multiple formats:</p>
+            <div class="button-group">
+                <a href="architecture_diagram.md" download class="btn btn-secondary">📄 Architecture Diagram (Markdown)</a>
+                <a href="data_flow_diagram.md" download class="btn btn-secondary">📊 Data Flow Diagram (Markdown)</a>
+                <a href="module_interaction_diagram.md" download class="btn btn-secondary">🔗 Module Interaction (Markdown)</a>
+            </div>
+            <p style="margin-top: 20px; color: #666;">
+                💡 <strong>Pro Tips:</strong>
+                <ul style="margin-top: 10px; color: #666;">
+                    <li>Open the Markdown files in any text editor or use <a href="https://mermaid.live" target="_blank">Mermaid Live Editor</a></li>
+                    <li>Export as PNG/SVG from Mermaid Live Editor for use in presentations</li>
+                    <li>Include in GitHub README for interactive documentation</li>
+                    <li>Embed in Obsidian, Notion, or other documentation tools that support Mermaid</li>
+                </ul>
+            </p>
+        </div>
+        
+        <footer>
+            <p>LeakWatch - Multimodal Privacy Protection System</p>
+            <p>Generated: February 2026 | <a href="https://mermaid.live" style="color: white;">View all diagrams online</a></p>
+        </footer>
+    </div>
+    
+    <script>
+        mermaid.contentLoaderDone();
+    </script>
+</body>
+</html>

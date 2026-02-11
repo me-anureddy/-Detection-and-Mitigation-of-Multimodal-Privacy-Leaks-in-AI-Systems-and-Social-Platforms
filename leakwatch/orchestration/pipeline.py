@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from ..adapters import AudioAdapter, VideoAdapter
-from ..detection import ImageDetector, TextDetector
+from ..detection import ImageDetector
 from ..explainability.audit import record_audit
 from ..explainability.image import render_image_overlay
 from ..explainability.text import render_text_spans
@@ -24,12 +24,43 @@ class PipelineManager:
 
     def __init__(self, config: LeakWatchConfig | None = None) -> None:
         self.config = config or get_config()
-        self.text_detector = TextDetector(self.config.text)
-        self.text_mitigator = TextMitigator(self.config.text)
-        self.image_detector = ImageDetector(self.config.image, text_detector=self.text_detector)
+        self._text_detector = None
+        self._text_mitigator = None
+        self._image_detector = None
         self.image_mitigator = ImageMitigator(self.config.image)
         self.audio_adapter = AudioAdapter()
         self.video_adapter = VideoAdapter()
+
+    def _get_image_detector(self):
+        """Lazily initialize image detector."""
+        if self._image_detector is None:
+            self._image_detector = ImageDetector(self.config.image, text_detector=None)
+        return self._image_detector
+
+    def _get_text_detector(self):
+        """Lazily initialize text detector to avoid spacy imports for image-only operations."""
+        if self._text_detector is None:
+            from ..detection import TextDetector
+            self._text_detector = TextDetector(self.config.text)
+        return self._text_detector
+
+    def _get_text_mitigator(self):
+        """Lazily initialize text mitigator."""
+        if self._text_mitigator is None:
+            self._text_mitigator = TextMitigator(self.config.text)
+        return self._text_mitigator
+
+    @property
+    def image_detector(self):
+        return self._get_image_detector()
+
+    @property
+    def text_detector(self):
+        return self._get_text_detector()
+
+    @property
+    def text_mitigator(self):
+        return self._get_text_mitigator()
 
     # --- Text Modality -------------------------------------------------
     def process_text(self, path: Path) -> DetectionResult:
