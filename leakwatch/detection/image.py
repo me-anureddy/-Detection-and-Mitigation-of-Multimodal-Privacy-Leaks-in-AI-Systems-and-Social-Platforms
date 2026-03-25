@@ -89,7 +89,7 @@ class ImageDetector:
                             }
                         )
                     )
-            else:
+            elif self._looks_sensitive(text):
                 results.append(
                     DetectedEntity(
                         modality=Modality.IMAGE,
@@ -101,6 +101,59 @@ class ImageDetector:
                     )
                 )
         return results
+
+    def _looks_sensitive(self, text: str) -> bool:
+        import re
+        text = text.strip()
+        if not text:
+            return False
+
+        lower_t = text.lower()
+        # Non-sensitive categories
+        safe_labels = {
+            "name", "dob", "address", "blood group", "date of issue",
+            "date of expiry", "license no.", "license no", "app store",
+            "driving license", "government of india", "verified by digilocker",
+            "tap to zoom", "present address", "permanent address",
+            "authorization", "to drive", "s/w/d"
+        }
+        
+        if lower_t in safe_labels:
+            return False
+            
+        # Short uppercase text (e.g., LMV, MCWG)
+        if len(text) <= 8 and text.isupper() and text.isalpha():
+            return False
+
+        # Titles and common words - very short text
+        if len(text) < 4 and text.isalpha():
+            return False
+
+        # Date pattern: YYYY-MM-DD, DD/MM/YYYY
+        if re.search(r'\b\d{2,4}[-/]\d{2}[-/]\d{2,4}\b', text):
+            return True
+
+        # Alphanumeric identifiers (ID-like): contains digits + letters
+        digits = sum(c.isdigit() for c in text)
+        alphas = sum(c.isalpha() for c in text)
+        if digits >= 2 and alphas >= 1 and len(text) >= 6:
+            return True
+
+        # Phone / ID numbers: lots of digits
+        if digits >= 6:
+            return True
+
+        # Long text (address-like)
+        if len(text) > 15 and ' ' in text:
+            return True
+
+        # Name-like pattern (Title Case or UPPERCASE 2+ words)
+        words = text.split()
+        if len(words) >= 2:
+            if all(w.istitle() or w.isupper() for w in words if w.isalpha()):
+                return True
+
+        return False
 
     @staticmethod
     def _bbox_from_points(points: Sequence[Tuple[float, float]]) -> BoundingBox:
